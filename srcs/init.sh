@@ -19,7 +19,7 @@ echo "GRANT ALL PRIVILEGES ON wordpress.* TO 'user'@'localhost' WITH GRANT OPTIO
 # wordpress
 wget https://wordpress.org/latest.tar.gz
 tar -xvf latest.tar.gz
-mv wordpress/ var/www/html/
+mv wordpress /var/www/html
 chown -R www-data:www-data /var/www/html/wordpress
 cp wp-config.php /var/www/html/wordpress
 
