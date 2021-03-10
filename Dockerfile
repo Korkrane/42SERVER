@@ -2,25 +2,28 @@
 FROM debian:buster
 MAINTAINER bahaas <bahaas@student.42.fr>
 
-# install dependencies
-# -y option automaticcaly answer yes to confirmation
-RUN apt-get update -y && apt-get install -y \
-	wget \
-	openssl \
-	nginx \
-	mariadb-server \
-	php-fpm \
-	php-mbstring \
-	php-mysql
-	
-# copy files to the container
-COPY srcs ./root/
-
-# set a directory
-WORKDIR /root/
+#declare env variable to enable autoindex on/off (on by default)
+ENV AUTOINDEX=1
 
 # define the port number the container should expose
-EXPOSE 80 443
+EXPOSE 80
+EXPOSE 443
 
-# run the command allow to config the services included in the image
-ENTRYPOINT ["bash", "init.sh"]
+# install dependencies
+# -y option automaticaly answer yes to confirmation
+RUN apt-get update -y && apt-get upgrade -y && apt-get install -y \
+mariadb-server \
+php7.3 php7.3-fpm php7.3-mysql php-common php7.3-cli php7.3-common php7.3-json php7.3-xml php7.3-opcache php7.3-readline php7.3-cgi php7.3-mbstring \
+wget tar nginx
+
+#get tar files of wordpress & phpmyadmin
+RUN wget -O /root/phpMyAdmin.tar.gz https://files.phpmyadmin.net/phpMyAdmin/5.1.0/phpMyAdmin-5.1.0-all-languages.tar.gz
+RUN wget -O /root/wordpress.tar.gz http://fr.wordpress.org/latest-fr_FR.tar.gz 
+
+# copy files to the container
+COPY srcs/init.sh /root
+COPY srcs/config.inc.php /root
+COPY srcs/wp-config.php /root
+COPY srcs/server.conf /etc/nginx/sites-available/localhost.conf
+
+CMD ["/root/init.sh"]
