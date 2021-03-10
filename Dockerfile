@@ -26,4 +26,5 @@ COPY srcs/config.inc.php /root
 COPY srcs/wp-config.php /root
 COPY srcs/server.conf /etc/nginx/sites-available/localhost.conf
 
+RUN chmod +x /root/init.sh
 CMD ["/root/init.sh"]
