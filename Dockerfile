@@ -2,6 +2,9 @@
 FROM debian:buster
 MAINTAINER bahaas <bahaas@student.42.fr>
 
+#hide multiple info mssg & warning during dependecies installation
+ENV DEBIAN_FRONTEND noninteractive
+
 #declare env variable to enable autoindex on/off (on by default)
 ENV AUTOINDEX=1
 
@@ -11,7 +14,7 @@ EXPOSE 443
 
 # install dependencies
 # -y option automaticaly answer yes to confirmation
-RUN apt-get update -y && apt-get upgrade -y && apt-get install -y \
+RUN apt-get update -y && apt-get utils -y && apt-get install -y \
 mariadb-server \
 php7.3 php7.3-fpm php7.3-mysql php-common php7.3-cli php7.3-common php7.3-json php7.3-xml php7.3-opcache php7.3-readline php7.3-cgi php7.3-mbstring \
 wget tar nginx
